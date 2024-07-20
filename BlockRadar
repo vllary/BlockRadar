@@ -1,0 +1,39 @@
+# scripts/network_analysis.py
+
+import requests
+import pandas as pd
+
+def fetch_network_data(api_url):
+    """
+    Fetch network data from an API.
+    
+    :param api_url: Base URL of the blockchain API
+    :return: DataFrame with network data
+    """
+    response = requests.get(f'{api_url}/network')
+    response.raise_for_status()
+    data = response.json()
+    df = pd.DataFrame(data)
+    return df
+
+def analyze_network_data(df):
+    """
+    Analyze network data.
+    
+    :param df: DataFrame with network data
+    :return: Analysis results as DataFrame
+    """
+    analysis = {
+        'total_transactions': df['transactions'].sum(),
+        'average_block_time': df['block_time'].mean(),
+        'total_blocks': df['blocks'].sum()
+    }
+    analysis_df = pd.DataFrame([analysis])
+    return analysis_df
+
+# Example usage:
+# api_url = 'https://api.blockchain.example.com'
+# network_data_df = fetch_network_data(api_url)
+# print(network_data_df)
+# network_analysis_df = analyze_network_data(network_data_df)
+# print(network_analysis_df)
